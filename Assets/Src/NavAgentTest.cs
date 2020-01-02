@@ -4,11 +4,15 @@ using System.Collections;
 
 public class NavAgentTest : MonoBehaviour
 {
+    private TaskQueue queue;
     private NavMeshAgent agent;
     private bool committedToPause = false;
 
+    private Task currentTask;
+
     private void Start()
     {
+        queue = FindObjectOfType<TaskQueue>(); // Not performant
         agent = GetComponent<NavMeshAgent>();
     }
 
@@ -20,7 +24,14 @@ public class NavAgentTest : MonoBehaviour
             {
                 if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f)
                 {
-                    StartCoroutine("Pause");
+                    currentTask = queue.GetFirstTask();
+
+                    if (currentTask == null) return;
+
+                    committedToPause = true;
+
+                    agent.SetDestination(currentTask.target.transform.position);
+                    //StartCoroutine("Pause");
                 }
             }
         }

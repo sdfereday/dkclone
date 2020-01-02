@@ -2,11 +2,10 @@
 
 public class Wall : Tile
 {
-    public bool selected = false;
     public int health = 3;
     public bool fortified = false;
     public AFFINITY affinity = AFFINITY.NEUTRAL;
-
+    
     private MeshRenderer rend;
     private Color defColour;
     private Color modColour;
@@ -24,8 +23,5 @@ public class Wall : Tile
 
         selected = !selected;
         rend.material.color = selected ? modColour : defColour;
-
-        // To test
-        Destroy(gameObject, 1f);
     }
 }

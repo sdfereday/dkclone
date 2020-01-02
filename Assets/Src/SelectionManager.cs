@@ -5,6 +5,12 @@ public class SelectionManager : MonoBehaviour
 {
     public float checkDistance = 1000f;
     private Transform current;
+    private TaskQueue queue;
+
+    private void Start()
+    {
+        queue = FindObjectOfType<TaskQueue>(); // Not performant
+    }
 
     private void DoOnPrimaryClick()
     {
@@ -18,6 +24,7 @@ public class SelectionManager : MonoBehaviour
 
         if (firstClickable != null)
         {
+            queue.AddTask(firstClickable.gameObject);
             firstClickable.TriggerIt();
         }
     }
