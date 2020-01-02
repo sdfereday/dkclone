@@ -24,5 +24,8 @@ public class Wall : Tile
 
         selected = !selected;
         rend.material.color = selected ? modColour : defColour;
+
+        // To test
+        Destroy(gameObject, 1f);
     }
 }
