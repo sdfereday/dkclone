@@ -6,9 +6,9 @@ public class NavAgentTest : MonoBehaviour
 {
     private TaskQueue queue;
     private NavMeshAgent agent;
-    private bool committedToPause = false;
 
     private Task currentTask;
+    private bool busy = false;
 
     private void Start()
     {
@@ -18,8 +18,16 @@ public class NavAgentTest : MonoBehaviour
 
     private void Update()
     {
-        if (!agent.pathPending && !committedToPause)
+        if (!agent.pathPending && !busy)
         {
+            if (agent.remainingDistance <= agent.stoppingDistance && currentTask != null)
+            {
+                Debug.Log(currentTask.target);
+                transform.LookAt(currentTask.target.transform);
+
+                StartCoroutine(SimulateTaskWait(currentTask));
+            }
+
             if (agent.remainingDistance <= agent.stoppingDistance)
             {
                 if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f)
@@ -28,20 +36,23 @@ public class NavAgentTest : MonoBehaviour
 
                     if (currentTask == null) return;
 
-                    committedToPause = true;
-
                     agent.SetDestination(currentTask.target.transform.position);
-                    //StartCoroutine("Pause");
                 }
             }
         }
     }
 
-    private IEnumerator Pause()
+    private IEnumerator SimulateTaskWait(Task task)
     {
-        committedToPause = true;
+        busy = true;
         yield return new WaitForSeconds(Random.Range(1f, 3f));
-        agent.SetDestination(agent.RandomPosition(Random.Range(10f, 20f)));
-        committedToPause = false;
+        busy = false;
+
+        Debug.Log("Obtained:" + task.resourceType);
+
+        currentTask = null;
+        queue.DestroyFirstTask();
+
+        agent.ResetPath();
     }
 }

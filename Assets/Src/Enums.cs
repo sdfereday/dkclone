@@ -4,3 +4,9 @@
     ALLIED,
     HOSTILE
 }
+
+public enum RESOURCE_TYPE
+{
+    WATER,
+    WOOD
+}
