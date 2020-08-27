@@ -8,5 +8,11 @@
 public enum RESOURCE_TYPE
 {
     WATER,
-    WOOD
+    WOOD,
+    DIRT
 }
+
+public enum TILE_TYPE
+{
+    DIGGABLE
+} 

@@ -24,8 +24,11 @@ public class SelectionManager : MonoBehaviour
 
         if (firstClickable != null)
         {
-            queue.AddTask(firstClickable.gameObject);
+            // First set selection properties on object
             firstClickable.TriggerIt();
+
+            // Then inform queue system (add task will deal with deselection)
+            queue.AddTask(firstClickable.gameObject);
         }
     }
     
